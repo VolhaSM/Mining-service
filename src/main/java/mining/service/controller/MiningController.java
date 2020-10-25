@@ -2,21 +2,31 @@ package mining.service.controller;
 
 import mining.service.pojo.Wallet;
 import mining.service.services.BlockMiningService;
+import mining.service.services.BlockTransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 
+
 public class MiningController {
+    @Autowired
     BlockMiningService blockMiningService;
 
-    @PostMapping(value = "/start-mining")
-    public ResponseEntity startMining(@RequestBody Wallet wallet) {
+    @Autowired
+    BlockTransactionService blockTransactionService;
 
-        return null;
+    @RequestMapping("/{walletId}/start-mining.html")
+    public String startMining(
+            @PathVariable String walletId
+    ) {
+
+        blockMiningService.createNewBlock("new block");
+//        blockTransactionService.createNewTransaction(recipientId, walletId, value);
+
+        return "ok";
 //        if(blockMiningService.startMining(wallet)) {
 //            return new ResponseEntity(HttpStatus.OK);
 //        }

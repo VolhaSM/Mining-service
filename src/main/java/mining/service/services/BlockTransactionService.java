@@ -12,17 +12,14 @@ public class BlockTransactionService {
     BlockTransactionRepo blockTransactionRepo;
 
 
-    public void createNewTransaction(String recipientId, String walletId, double value) {
+    public void createNewTransaction(String recipientId, double value) {
 
         if (blockTransactionRepo.findAll() == null) {
 
-            BlockTransactions genesisTransaction = new BlockTransactions(null, walletId, 50);
+            BlockTransactions genesisTransaction = new BlockTransactions();
+            genesisTransaction.setRecipient(recipientId);
+            genesisTransaction.setValue(500.0);
             blockTransactionRepo.save(genesisTransaction);
-
-        } else {
-
-            BlockTransactions transaction = new BlockTransactions(recipientId, walletId, value);
-            blockTransactionRepo.save(transaction);
 
         }
 

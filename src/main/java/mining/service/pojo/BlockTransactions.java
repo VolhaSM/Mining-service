@@ -26,12 +26,12 @@ public class BlockTransactions {
     public double value;
 
     // Constructor:
-    public BlockTransactions(String from, String to, double value) {
-        this.sender = from;
-        this.recipient = to;
-        this.value = value;
-
-    }
+//    public BlockTransactions(String from, String to, double value) {
+//        this.sender = from;
+//        this.recipient = to;
+//        this.value = value;
+//
+//    }
 
 
     //    public byte[] signature; // this is to prevent anybody else from spending funds in our wallet.

@@ -27,13 +27,14 @@ public class Block {
     private String data;
     private long timestamp;
     private int nonce;
+    private String walletId;
 
-    public Block(String data, String previousHash) {
-        this.data = data;
-        this.previousHash = previousHash;
-        this.timestamp = new Date().getTime();
-        this.hash = calculateHash();
-    }
+//    public Block(String data, String previousHash) {
+//        this.data = data;
+//        this.previousHash = previousHash;
+//        this.timestamp = new Date().getTime();
+//        this.hash = calculateHash();
+//    }
 
     public String calculateHash() {
         String calculateHash = BlockUtil.applySHA256(
