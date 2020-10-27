@@ -11,6 +11,9 @@ import java.util.List;
 public interface BlockTransactionRepo extends CrudRepository<BlockTransactions, String> {
 
     List<BlockTransactions> findAll();
+    BlockTransactions findAllByStatus(String searchStr);
+    BlockTransactions findFirstByStatus(String searchStr);
+
 
 
 }

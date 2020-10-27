@@ -23,8 +23,8 @@ public class MiningController {
             @PathVariable String walletId
     ) {
 
-        blockMiningService.createNewBlock("new block");
-//        blockTransactionService.createNewTransaction(recipientId, walletId, value);
+        blockMiningService.createNewBlock(walletId);
+
 
         return "ok";
 //        if(blockMiningService.startMining(wallet)) {
