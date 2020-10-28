@@ -43,18 +43,15 @@ public class BlockMiningService {
 
             Log.info("DATA OF BLOCK IS: {}", blockTransactionRepo.findFirstByStatus("inProgress"));
 
-
-            if (blockTransactionRepo.findFirstByStatus("inProgress").toString() != null) {
-                newBlock.setData(blockTransactionRepo.findFirstByStatus("inProgress").toString());
-            } else {
-                newBlock.setData("no transaction");
-            }
+            findTxInProgress(newBlock);
 
             newBlock.setWalletId(walletId);
             newBlock.setTimestamp(System.currentTimeMillis());
             newBlock.setPreviousHash(blockRepo.findFirstByOrderByTimestampDesc().getHash());
 
             newBlock.setHash(newBlock.calculateHash());
+
+
 
             blockRepo.save(newBlock);
 
@@ -65,9 +62,12 @@ public class BlockMiningService {
 
         public void findTxInProgress(Block newBlock){
 
-            String txInProgress = blockTransactionRepo.findFirstByStatus("inProgress").toString();
+            BlockTransactions txInProgress = blockTransactionRepo.findFirstByStatus("inProgress");
             if ( txInProgress!= null) {
-                newBlock.setData(txInProgress);
+                newBlock.setData(txInProgress.toString());
+                txInProgress.setStatus("DONE");
+                blockTransactionRepo.save(txInProgress);
+
 
             }
             else {
@@ -77,5 +77,5 @@ public class BlockMiningService {
     }
 
 
-}
+
 
