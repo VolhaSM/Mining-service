@@ -1,6 +1,5 @@
 package mining.service.repository;
 
-import mining.service.pojo.Block;
 import mining.service.pojo.BlockTransactions;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,9 +10,8 @@ import java.util.List;
 public interface BlockTransactionRepo extends CrudRepository<BlockTransactions, String> {
 
     List<BlockTransactions> findAll();
-    BlockTransactions findAllByStatus(String searchStr);
-    BlockTransactions findFirstByStatus(String searchStr);
 
+    BlockTransactions findFirstByStatus(String searchStr);
 
 
 }

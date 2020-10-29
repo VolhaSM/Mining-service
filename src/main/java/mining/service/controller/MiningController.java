@@ -22,13 +22,8 @@ public class MiningController {
         blockMiningService.startMining(walletId);
 
 
-        return "ok";
-//        if(blockMiningService.startMining(wallet)) {
-//            return new ResponseEntity(HttpStatus.OK);
-//        }
-//        else{
-//            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+        return "Block is mined";
+
 
     }
 }
