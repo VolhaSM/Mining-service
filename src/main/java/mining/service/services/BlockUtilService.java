@@ -1,10 +1,14 @@
-package mining.service.pojo;
+package mining.service.services;
+
+import mining.service.pojo.Block;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.security.MessageDigest;
 import java.util.Base64;
 
-public class BlockUtil {
+@Service
+public class BlockUtilService {
 
     public static String applySHA256(String input) {
 
@@ -23,6 +27,17 @@ public class BlockUtil {
         catch(Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String calculateHash(Block block) {
+        String calculateHash = BlockUtilService.applySHA256(
+                block.getPreviousHash() +
+                        block.getTimestamp() +
+                        block.getNonce() +
+                        block.getData()
+        );
+
+        return calculateHash;
     }
 
     public static String getStringFromKey(Key key) {

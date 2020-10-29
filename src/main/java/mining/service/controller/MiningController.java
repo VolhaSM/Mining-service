@@ -1,12 +1,10 @@
 package mining.service.controller;
 
-import mining.service.pojo.Wallet;
 import mining.service.services.BlockMiningService;
-import mining.service.services.BlockTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 
@@ -15,15 +13,13 @@ public class MiningController {
     @Autowired
     BlockMiningService blockMiningService;
 
-    @Autowired
-    BlockTransactionService blockTransactionService;
 
     @RequestMapping("/{walletId}/start-mining.html")
     public String startMining(
             @PathVariable String walletId
     ) {
 
-        blockMiningService.createNewBlock(walletId);
+        blockMiningService.startMining(walletId);
 
 
         return "ok";

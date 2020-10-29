@@ -24,22 +24,25 @@ public class BlockMiningService {
     @Autowired
     BlockTransactionRepo blockTransactionRepo;
 
-    public void createNewBlock(String walletId) {
+    @Autowired
+    BlockUtilService blockUtilService;
+
+
+    public Block createNewBlock(String walletId) {
+        Block newBlock = new Block();
 
         if (blockRepo.findFirstByOrderByTimestampDesc() == null) {
 
-            Block genesisBlock = new Block();
-            genesisBlock.setHash("genesis");
-            genesisBlock.setData("genesis");
-            genesisBlock.setWalletId(walletId);
-            genesisBlock.setTimestamp(System.currentTimeMillis());
-            blockRepo.save(genesisBlock);
 
-            Log.info("Genesis block is created {}", genesisBlock);
+            newBlock.setHash("genesis");
+            newBlock.setData("genesis");
+            newBlock.setWalletId(walletId);
+            newBlock.setTimestamp(System.currentTimeMillis());
+            blockRepo.save(newBlock);
+
+            Log.info("Genesis block is created {}", newBlock);
         } else {
 
-
-            Block newBlock = new Block();
 
             Log.info("DATA OF BLOCK IS: {}", blockTransactionRepo.findFirstByStatus("inProgress"));
 
@@ -49,8 +52,7 @@ public class BlockMiningService {
             newBlock.setTimestamp(System.currentTimeMillis());
             newBlock.setPreviousHash(blockRepo.findFirstByOrderByTimestampDesc().getHash());
 
-            newBlock.setHash(newBlock.calculateHash());
-
+            newBlock.setHash(blockUtilService.calculateHash(newBlock));
 
 
             blockRepo.save(newBlock);
@@ -58,23 +60,48 @@ public class BlockMiningService {
             Log.info("Genesis block is created {}", newBlock);
 
         }
+        return newBlock;
+
     }
 
-        public void findTxInProgress(Block newBlock){
+    public void findTxInProgress(Block newBlock) {
 
-            BlockTransactions txInProgress = blockTransactionRepo.findFirstByStatus("inProgress");
-            if ( txInProgress!= null) {
-                newBlock.setData(txInProgress.toString());
-                txInProgress.setStatus("DONE");
-                blockTransactionRepo.save(txInProgress);
+        BlockTransactions txInProgress = blockTransactionRepo.findFirstByStatus("inProgress");
+        if (txInProgress != null) {
+            newBlock.setData(txInProgress.toString());
+            txInProgress.setStatus("DONE");
+            blockTransactionRepo.save(txInProgress);
 
 
-            }
-            else {
-                newBlock.setData("no free transactions");
-            }
+        } else {
+            newBlock.setData("no free transactions");
         }
     }
+
+    public Block startMining(String walletId) {
+        Block block = createNewBlock(walletId);
+        mineBlock(block);
+
+        return block;
+
+    }
+
+
+    public void mineBlock(Block block) {
+
+        int nonce = block.getNonce();
+        while (!block.getHash().startsWith("0000")) {
+            nonce++;
+            block.setNonce(nonce);
+            block.setHash(blockUtilService.calculateHash(block));
+
+        }
+
+        blockRepo.save(block);
+
+
+    }
+}
 
 
 
