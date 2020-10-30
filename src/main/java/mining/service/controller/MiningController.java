@@ -19,10 +19,14 @@ public class MiningController {
             @PathVariable String walletId
     ) {
 
-        blockMiningService.startMining(walletId);
+        if (blockMiningService.startMining(walletId)) {
 
 
-        return "Block is mined";
+            return "Block is mined";
+        }
+        else {
+            return  "Block is NOT  mined";
+        }
 
 
     }

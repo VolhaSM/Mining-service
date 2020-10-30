@@ -30,6 +30,7 @@ public class BlockMiningService {
 
         if (blockRepo.findFirstByOrderByTimestampDesc() == null) {
 
+            // if there's no blocks in DB, create a genesis block
 
             newBlock.setHash("genesis");
             newBlock.setData("genesis");
@@ -43,25 +44,30 @@ public class BlockMiningService {
 
             Log.info("DATA OF BLOCK IS: {}", blockTransactionRepo.findFirstByStatus("inProgress"));
 
-            findTxInProgress(newBlock);
+            // if block exists, find a transaction in progress
+            // and create a new block with hash based on previous block, found by timestamp
 
-            newBlock.setWalletId(walletId);
-            newBlock.setTimestamp(System.currentTimeMillis());
-            newBlock.setPreviousHash(blockRepo.findFirstByOrderByTimestampDesc().getHash());
+            if (findTxInProgress(newBlock)) {
 
-            newBlock.setHash(blockUtilService.calculateHash(newBlock));
+                newBlock.setWalletId(walletId);
+                newBlock.setTimestamp(System.currentTimeMillis());
+                newBlock.setPreviousHash(blockRepo.findFirstByOrderByTimestampDesc().getHash());
+                newBlock.setHash(blockUtilService.calculateHash(newBlock));
 
 
-            blockRepo.save(newBlock);
+                blockRepo.save(newBlock);
 
-            Log.info("Genesis block is created {}", newBlock);
+
+                Log.info("Genesis block is created {}", newBlock);
+            }
 
         }
-        return newBlock;
+        //if there's no transaction in progress, the block is not created
+        return null;
 
     }
 
-    public void findTxInProgress(Block newBlock) {
+    public boolean findTxInProgress(Block newBlock) {
 
         BlockTransactions txInProgress = blockTransactionRepo.findFirstByStatus("inProgress");
         if (txInProgress != null) {
@@ -69,17 +75,27 @@ public class BlockMiningService {
             txInProgress.setStatus("DONE");
             blockTransactionRepo.save(txInProgress);
 
+            return true;
 
         } else {
-            newBlock.setData("no free transactions");
+
+            return false;
         }
     }
 
-    public Block startMining(String walletId) {
-        Block block = createNewBlock(walletId);
-        mineBlock(block);
+    public boolean startMining(String walletId) {
 
-        return block;
+        Block block = createNewBlock(walletId);
+
+        Log.info(" NEW BLOCK IS {}", block);
+        if (block != null) {
+
+            mineBlock(block);
+            return true;
+        }
+
+        //if there's no block, no mining
+        return false;
 
     }
 
@@ -95,7 +111,6 @@ public class BlockMiningService {
         }
 
         blockRepo.save(block);
-
 
     }
 }
