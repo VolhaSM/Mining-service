@@ -20,10 +20,10 @@ public class BlockTransactions {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    public String id;
-    public String sender;
-    public String recipient;
-    public double value;
-    public String status;
+    private String id;
+    private String sender;
+    private String recipient;
+    private double value;
+    private String status;
 
 }

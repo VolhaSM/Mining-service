@@ -26,13 +26,11 @@ public class BlockUtilService {
     }
 
     public String calculateHash(Block block) {
-        String calculateHash = BlockUtilService.applySHA256(
+        return BlockUtilService.applySHA256(
                 block.getPreviousHash() +
                         block.getTimestamp() +
                         block.getNonce() +
                         block.getData()
         );
-
-        return calculateHash;
     }
 }

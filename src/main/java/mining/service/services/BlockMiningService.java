@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class BlockMiningService {
 
@@ -38,7 +37,11 @@ public class BlockMiningService {
             newBlock.setTimestamp(System.currentTimeMillis());
             blockRepo.save(newBlock);
 
+
             Log.info("Genesis block is created {}", newBlock);
+
+            return newBlock;
+
         } else {
 
 
@@ -53,12 +56,11 @@ public class BlockMiningService {
                 newBlock.setTimestamp(System.currentTimeMillis());
                 newBlock.setPreviousHash(blockRepo.findFirstByOrderByTimestampDesc().getHash());
                 newBlock.setHash(blockUtilService.calculateHash(newBlock));
-
-
                 blockRepo.save(newBlock);
 
-
                 Log.info("Genesis block is created {}", newBlock);
+
+                return newBlock;
             }
 
         }
@@ -78,7 +80,7 @@ public class BlockMiningService {
             return true;
 
         } else {
-
+            
             return false;
         }
     }
@@ -114,7 +116,3 @@ public class BlockMiningService {
 
     }
 }
-
-
-
-
