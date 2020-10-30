@@ -3,9 +3,7 @@ package mining.service.services;
 import mining.service.pojo.Block;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.security.MessageDigest;
-import java.util.Base64;
 
 @Service
 public class BlockUtilService {
@@ -36,9 +34,5 @@ public class BlockUtilService {
         );
 
         return calculateHash;
-    }
-
-    public static String getStringFromKey(Key key) {
-        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 }
