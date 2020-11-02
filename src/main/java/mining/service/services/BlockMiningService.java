@@ -4,6 +4,7 @@ import mining.service.pojo.Block;
 import mining.service.pojo.BlockTransactions;
 import mining.service.repository.BlockRepo;
 import mining.service.repository.BlockTransactionRepo;
+import mining.service.repository.WalletRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class BlockMiningService {
 
     @Autowired
     BlockUtilService blockUtilService;
+
+    @Autowired
+    WalletRepo walletRepo;
 
 
     public Block createNewBlock(String walletId) {
@@ -93,6 +97,12 @@ public class BlockMiningService {
         if (block != null) {
 
             mineBlock(block);
+            BlockTransactions tx = new BlockTransactions();
+            tx.setSender("You mined the Block!");
+            tx.setStatus("GotByMining");
+            tx.setRecipient(walletId);
+            tx.setValue(20);
+            blockTransactionRepo.save(tx);
             return true;
         }
 

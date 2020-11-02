@@ -10,4 +10,5 @@ public interface BlockTransactionRepo extends CrudRepository<BlockTransactions, 
     BlockTransactions findFirstByStatus(String searchStr);
 
 
+
 }
